@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
+import '../main.dart';
 import '../models/card_model.dart';
 
 class CartService implements CartInterface {
@@ -29,7 +30,7 @@ class CartService implements CartInterface {
   @override
   Future<WsResponse> getProduct(
       {required int productId, required BuildContext context}) async {
-    const String url = 'http://10.0.0.195:3001/api/v1/products/2788';
+     String url = 'http://${env!['localHostIp']}:3001/api/v1/products/2788';
     final http.Response response = await http.get(Uri.parse(url));
     final product = jsonDecode(response.body) ;
     try {

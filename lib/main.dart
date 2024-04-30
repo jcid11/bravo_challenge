@@ -9,9 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/app/app_state.dart';
 import 'bloc/observer.dart';
+import 'env.dart';
 import 'firebase_options.dart';
 
+Map<String, String>? env;
+
 void main() async {
+  env = await loadEnvFile('assets/env/env');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

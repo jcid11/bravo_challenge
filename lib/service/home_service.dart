@@ -4,8 +4,9 @@ import 'package:bravo_challenge/data/home_interface.dart';
 import 'package:bravo_challenge/models/product_model.dart';
 import 'package:bravo_challenge/utils/extensions.dart';
 import 'package:bravo_challenge/utils/ws_response.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+
+import '../main.dart';
 
 class HomeService implements HomeInterface {
   // @override
@@ -32,7 +33,7 @@ class HomeService implements HomeInterface {
   // }
   @override
   Future<WsResponse> getProducts({required int page,required int pageSize}) async {
-     String url = 'http://10.0.0.195:3001/api/v1/products?limit=$pageSize&page=$page';
+     String url = 'http://${env!['localHostIp']}:3001/api/v1/products?limit=$pageSize&page=$page';
     try {
       // final jsonBody = await Response().getAllProduct(context);
       final http.Response response= await http.get(Uri.parse(url));
