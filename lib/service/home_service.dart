@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:bravo_challenge/data/home_interface.dart';
 import 'package:bravo_challenge/models/product_model.dart';
-import 'package:bravo_challenge/service/response.dart';
+import 'package:bravo_challenge/utils/extensions.dart';
 import 'package:bravo_challenge/utils/ws_response.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 
 class HomeService implements HomeInterface {
   // @override
@@ -28,17 +31,21 @@ class HomeService implements HomeInterface {
   //   }
   // }
   @override
-  Future<WsResponse> getProducts(BuildContext context) async {
+  Future<WsResponse> getProducts({required int page,required int pageSize}) async {
+     String url = 'http://10.0.0.195:3001/api/v1/products?limit=$pageSize&page=$page';
     try {
-      final jsonBody = await Response().getAllProduct(context);
-      if (jsonBody['success']) {
-        List jsonList = jsonBody['data']['data']['list'];
+      // final jsonBody = await Response().getAllProduct(context);
+      final http.Response response= await http.get(Uri.parse(url));
+      final jsonAnswer = jsonDecode(response.body);
+
+      if (jsonAnswer['success']) {
+        List jsonList = jsonAnswer['data']['records'];
         List<ProductModel> productList = jsonList
             .map((element) => ProductModel(
                 id: element['idArticulo'],
                 name: element['nombreArticulo'],
-                price: element['associatedPvp'],
-                tax: element['impuestoArticulo']))
+                price: element['associatedPvp'].toString().doubleToInt(),
+                tax: element['impuestoArticulo'].toString().doubleToInt()))
             .toList();
         return WsResponse(success: true, data: productList);
       }

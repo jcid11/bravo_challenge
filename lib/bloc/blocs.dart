@@ -25,7 +25,7 @@ class BlocApp extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   AppBloc(authenticationRepository: authenticationRepository)),
-          BlocProvider(create: (_) => HomeBloc()),
+          // BlocProvider(create: (_) => HomeBloc()),
           BlocProvider(
               create: (_) => CartBloc(
                   userEmail: authenticationRepository.currentUser.email??''))

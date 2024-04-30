@@ -15,10 +15,15 @@ extension StringExtensions on String {
   String toPesos(){
     return '\$${this}0DOP';
   }
+
+  int doubleToInt()=>int.parse(split('.')[0]);
+
 }
 
 extension DecimalRound on double {
   double toPrecision() => double.parse(toStringAsFixed(2));
+
+  int doubleToInt()=>int.parse(toString().split('.')[0]);
 }
 
 extension Convertion on num{

@@ -1,8 +1,8 @@
 class ProductModel {
   final int id;
   final String name;
-  final double price;
-  final double tax;
+  final int price;
+  final int tax;
 
   ProductModel(
       {required this.id,

@@ -1,25 +1,56 @@
+import 'dart:convert';
+
 import 'package:bravo_challenge/data/cart_interface.dart';
 import 'package:bravo_challenge/models/product_model.dart';
-import 'package:bravo_challenge/service/response.dart';
+import 'package:bravo_challenge/utils/extensions.dart';
 import 'package:bravo_challenge/utils/ws_response.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/card_model.dart';
 
 class CartService implements CartInterface {
+  // @override
+  // Future<WsResponse> getProduct(
+  //     {required int productId, required BuildContext context}) async {
+  //   const String url = 'localhost:3001/api/v1/products/2788';
+  //   final response = await Response().getProduct(context, productId);
+  //   try {
+  //     if (response['success']) {
+  //       return WsResponse(success: true,data: ProductModel.fromJson(response['data']));
+  //     }
+  //     return WsResponse(success: false);
+  //   } catch (_) {
+  //     return WsResponse(success: false);
+  //   }
+  // }
+
   @override
   Future<WsResponse> getProduct(
       {required int productId, required BuildContext context}) async {
-    final response = await Response().getProduct(context, productId);
+    const String url = 'http://10.0.0.195:3001/api/v1/products/2788';
+    final http.Response response = await http.get(Uri.parse(url));
+    final product = jsonDecode(response.body) ;
     try {
-      if (response['success']) {
-        return WsResponse(success: true,data: ProductModel.fromJson(response['data']));
+      if (response.statusCode == 200) {
+          return WsResponse(
+            success: true,
+            data: ProductModel.fromJson(product['data']));
       }
       return WsResponse(success: false);
-    } catch (_) {
+    } catch (e) {
       return WsResponse(success: false);
+
     }
+    // try {
+    //   if (response['success']) {
+    //     return WsResponse(success: true,data: ProductModel.fromJson(response['data']));
+    //   }
+    //   return WsResponse(success: false);
+    // } catch (_) {
+    //   return WsResponse(success: false);
+    // }
   }
 
   @override
@@ -30,12 +61,14 @@ class CartService implements CartInterface {
         .collection('cartItems')
         .get();
     List cartList = cartSnapshot.docs.map((doc) {
+      double price = doc['price'] ;
+      double tax = doc['tax'] ;
       return CartItem(
         ProductModel(
             id: int.parse(doc['productId']),
             name: doc['name'],
-            price: doc['price'],
-            tax: doc['tax']),
+            price: price.doubleToInt(),
+            tax: tax.doubleToInt()),
         doc['quantity'],
       );
     }).toList();
@@ -51,8 +84,8 @@ class CartService implements CartInterface {
       {required String productId,
       required String userEmail,
       required String name,
-      required double tax,
-      required double price}) async {
+      required int tax,
+      required int price}) async {
     final cartRef = FirebaseFirestore.instance
         .collection('cartUser')
         .doc(userEmail)

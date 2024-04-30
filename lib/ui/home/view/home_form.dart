@@ -5,80 +5,165 @@ import 'package:bravo_challenge/utils/reusable_widget/circle_button.dart';
 import 'package:bravo_challenge/utils/reusable_widget/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../bloc/cart/cart_bloc.dart';
 import '../../../bloc/cart/cart_event.dart';
 import '../../../bloc/cart/cart_state.dart';
-import '../../../bloc/home/home_bloc.dart';
-import '../../../bloc/home/home_state.dart';
+import '../../../bloc/home/pagination_bloc.dart';
 import '../../../models/card_model.dart';
 import '../../../models/product_model.dart';
 import '../../../utils/theme.dart';
 import '../../cart/cart_page.dart';
 
-class ProductListContainer extends StatelessWidget {
-  const ProductListContainer({Key? key}) : super(key: key);
+// class ProductListContainer extends StatelessWidget {
+//   const ProductListContainer({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<HomeBloc, HomeState>(
+//       builder: (BuildContext context, state) {
+//         if (state.productListStatus == ProductListStatus.success) {
+//           return LayoutBuilder(
+//               builder: (context, constraints) => SizedBox(
+//                     height: constraints.maxHeight,
+//                     child: ListView.separated(
+//                       padding: const EdgeInsets.only(bottom: 20),
+//                       itemBuilder: (BuildContext context, int index) {
+//                         final product = state.productList![index];
+//                         return Card(
+//                           elevation: 4,
+//                           color: ThemeApp.primaryColor,
+//                           child: RawMaterialButton(
+//                             onPressed: () => Navigator.push<void>(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                     builder: (context) => BlocProvider(
+//                                           create: (_) => ProductCubit(
+//                                               context: context,
+//                                               productId: product.id),
+//                                           child: const ProductPage(),
+//                                         ))),
+//                             shape: RoundedRectangleBorder(
+//                                 borderRadius: BorderRadius.circular(12)),
+//                             child: ListTile(
+//                               contentPadding:
+//                                   const EdgeInsets.only(left: 20, right: 16),
+//                               trailing: rowFunctionality(context, product),
+//                               title: Text(
+//                                 product.name,
+//                                 style: context.listTextStyle,
+//                               ),
+//                               subtitle: Text(
+//                                 '\$${product.price.toString()}0',
+//                                 style: context.listTextStyle!.copyWith(
+//                                     fontWeight: FontWeight.w500, fontSize: 12),
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                       separatorBuilder: (BuildContext context, int index) =>
+//                           const SizedBox(
+//                         height: 10,
+//                       ),
+//                       itemCount: state.productList!.length,
+//                     ),
+//                   ));
+//         }
+//         if (state.productListStatus == ProductListStatus.failure) {
+//           return const Text(' a mistake has happen');
+//         }
+//         return const Center(
+//           child: CircularProgressIndicator(),
+//         );
+//       },
+//     );
+//   }
+// }
+
+
+class ProductsList extends StatefulWidget {
+  const ProductsList({Key? key}) : super(key: key);
+
+  @override
+  State<ProductsList> createState() => _ProductsListState();
+}
+
+class _ProductsListState extends State<ProductsList> {
+  final BlocHome _blocHome = BlocHome();
+
+  @override
+  void initState() {
+    _blocHome.listenPageKey();
+    _blocHome.listenNewState();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _blocHome.closeStreams();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (BuildContext context, state) {
-        if (state.productListStatus == ProductListStatus.success) {
-          return LayoutBuilder(
-              builder: (context, constraints) => SizedBox(
-                    height: constraints.maxHeight,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      itemBuilder: (BuildContext context, int index) {
-                        final product = state.productList![index];
-                        return Card(
-                          elevation: 4,
-                          color: ThemeApp.primaryColor,
-                          child: RawMaterialButton(
-                            onPressed: () => Navigator.push<void>(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BlocProvider(
-                                          create: (_) => ProductCubit(
-                                              context: context,
-                                              productId: product.id),
-                                          child: const ProductPage(),
-                                        ))),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: ListTile(
-                              contentPadding:
-                                  const EdgeInsets.only(left: 20, right: 16),
-                              trailing: rowFunctionality(context, product),
-                              title: Text(
-                                product.name,
-                                style: context.listTextStyle,
-                              ),
-                              subtitle: Text(
-                                '\$${product.price.toString()}0',
-                                style: context.listTextStyle!.copyWith(
-                                    fontWeight: FontWeight.w500, fontSize: 12),
-                              ),
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => Future.sync(
+                    () => _blocHome.pagingController.refresh(),
+              ),
+              child: PagedListView<int, ProductModel>(
+                pagingController: _blocHome.pagingController,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                builderDelegate: PagedChildBuilderDelegate<ProductModel>(
+                  animateTransitions: true,
+                  itemBuilder: (context, item, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: Card(
+                        elevation: 4,
+                        color: ThemeApp.primaryColor,
+                        child: RawMaterialButton(
+                          onPressed: () => Navigator.push<void>(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (_) => ProductCubit(
+                                        context: context,
+                                        productId: item.id),
+                                    child: const ProductPage(),
+                                  ))),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          child: ListTile(
+                            contentPadding:
+                            const EdgeInsets.only(left: 20, right: 16),
+                            trailing: rowFunctionality(context, item),
+                            title: Text(
+                              item.name,
+                              style: context.listTextStyle,
+                            ),
+                            subtitle: Text(
+                              '\$${item.price.toString()}',
+                              style: context.listTextStyle!.copyWith(
+                                  fontWeight: FontWeight.w500, fontSize: 12),
                             ),
                           ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(
-                        height: 10,
+                        ),
                       ),
-                      itemCount: state.productList!.length,
-                    ),
-                  ));
-        }
-        if (state.productListStatus == ProductListStatus.failure) {
-          return const Text(' a mistake has happen');
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

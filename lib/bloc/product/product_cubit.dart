@@ -20,6 +20,7 @@ class ProductCubit extends Cubit<ProductState> {
       {required BuildContext context, required int productId}) async {
     emit(state.copyWith(productStatus: ProductStatus.loading));
     try {
+
       final response =
           await _cartService.getProduct(productId: productId, context: context);
       emit(state.copyWith(

@@ -33,7 +33,7 @@ class ProductScreen extends StatelessWidget {
                           children: [
                             informationRow(
                                 title: 'Name',
-                                value: product!.name.capitalize()),
+                                value: product!.name.toString().capitalize()),
                             informationRow(
                                 title: 'Price',
                                 value: product.price.toString().toPesos()),

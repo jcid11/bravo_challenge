@@ -9,8 +9,8 @@ abstract class CartInterface {
     required String productId,
     required String userEmail,
     required String name,
-    required double tax,
-    required double price
+    required int tax,
+    required int price
   });
 
   Future<WsResponse> removeFromCart(

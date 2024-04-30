@@ -9,7 +9,7 @@ import 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final List<CartItem?> _cartItems = [];
   final CartInterface _cartService;
-   final String userEmail;
+  final String userEmail;
 
   CartBloc({required this.userEmail})
       : _cartService = CartService(),
@@ -22,11 +22,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<GetUserEvent>(_assignUserEmail);
   }
 
-  void _assignUserEmail(GetUserEvent event,Emitter<CartState>emit){
+  void _assignUserEmail(GetUserEvent event, Emitter<CartState> emit) {
     emit(state.copyWith(userEmail: event.userEmail));
   }
-
-
 
   void _cleanCart(CleanCartEvent event, Emitter<CartState> emit) {
     _cartItems.clear();
@@ -44,7 +42,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     num totalProductPrice = 0;
     num totalTaxPrice = 0;
     num totalAmount = 0;
-    final result = await _cartService.getCartItems(userEmail: state.userEmail??'');
+    final result =
+        await _cartService.getCartItems(userEmail: state.userEmail ?? '');
     final List<CartItem> cart = result.data;
 
     if (result.success) {
@@ -100,7 +99,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       final result = await _cartService.addToCart(
           productId: event.product.id.toString(),
-          userEmail: state.userEmail??'',
+          userEmail: state.userEmail ?? '',
           name: event.product.name,
           tax: event.product.tax,
           price: event.product.price);
@@ -143,7 +142,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         double totalTaxAmount = state.totalTaxPrice;
         double totalAmount = state.totalAmount;
         final result = await _cartService.removeFromCart(
-            productId: event.product.id.toString(), userEmail: state.userEmail??'');
+            productId: event.product.id.toString(),
+            userEmail: state.userEmail ?? '');
         if (result.success &&
             state.addLoadingStatus != AddLoadingStatus.loading) {
           /**/
