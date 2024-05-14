@@ -83,7 +83,6 @@ import '../../cart/cart_page.dart';
 //   }
 // }
 
-
 class ProductsList extends StatefulWidget {
   const ProductsList({Key? key}) : super(key: key);
 
@@ -96,8 +95,8 @@ class _ProductsListState extends State<ProductsList> {
 
   @override
   void initState() {
-    _blocHome.listenPageKey();
-    _blocHome.listenNewState();
+    // _blocHome.listenPageKey();
+    // _blocHome.listenNewState();
     super.initState();
   }
 
@@ -115,7 +114,7 @@ class _ProductsListState extends State<ProductsList> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => Future.sync(
-                    () => _blocHome.pagingController.refresh(),
+                () => _blocHome.pagingController.refresh(),
               ),
               child: PagedListView<int, ProductModel>(
                 pagingController: _blocHome.pagingController,
@@ -133,16 +132,16 @@ class _ProductsListState extends State<ProductsList> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BlocProvider(
-                                    create: (_) => ProductCubit(
-                                        context: context,
-                                        productId: item.id),
-                                    child: const ProductPage(),
-                                  ))),
+                                        create: (_) => ProductCubit(
+                                            context: context,
+                                            productId: item.id),
+                                        child: const ProductPage(),
+                                      ))),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
                           child: ListTile(
                             contentPadding:
-                            const EdgeInsets.only(left: 20, right: 16),
+                                const EdgeInsets.only(left: 20, right: 16),
                             trailing: rowFunctionality(context, item),
                             title: Text(
                               item.name,
@@ -197,8 +196,9 @@ Widget rowFunctionality(BuildContext context, ProductModel product) {
                   return BuildCircleIconButton(
                       onPressed: () {
                         assignedRemovingValue = product.id;
-                        context.read<CartBloc>().add(RemoveQuantityEvent(
-                            product));
+                        context
+                            .read<CartBloc>()
+                            .add(RemoveQuantityEvent(product));
                       },
                       icon: Icons.remove,
                       iconColor: Colors.teal,
@@ -332,10 +332,14 @@ Widget amountQuantityContainer() => BlocBuilder<CartBloc, CartState>(
 Widget cartIconContainer(BuildContext context) => Stack(
       children: [
         RawMaterialButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const CartPage()));
-            },
+            onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<CartBloc>(context),
+                      child: const CartPage(),
+                    ),
+                  ),
+                ),
             child: const Icon(
               Icons.shopping_cart,
               size: 28,

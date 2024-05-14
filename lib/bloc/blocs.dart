@@ -1,5 +1,4 @@
 import 'package:bravo_challenge/bloc/cart/cart_bloc.dart';
-import 'package:bravo_challenge/bloc/home/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,9 +25,9 @@ class BlocApp extends StatelessWidget {
               create: (context) =>
                   AppBloc(authenticationRepository: authenticationRepository)),
           // BlocProvider(create: (_) => HomeBloc()),
-          BlocProvider(
-              create: (_) => CartBloc(
-                  userEmail: authenticationRepository.currentUser.email??''))
+          // BlocProvider(
+          //     create: (_) => CartBloc(
+          //         userEmail: authenticationRepository.currentUser.email??''))
         ],
         child: child,
       ),

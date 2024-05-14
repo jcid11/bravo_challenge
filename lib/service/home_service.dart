@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bravo_challenge/data/home_interface.dart';
 import 'package:bravo_challenge/models/product_model.dart';
-import 'package:bravo_challenge/utils/extensions.dart';
 import 'package:bravo_challenge/utils/ws_response.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,8 +44,8 @@ class HomeService implements HomeInterface {
             .map((element) => ProductModel(
                 id: element['idArticulo'],
                 name: element['nombreArticulo'],
-                price: element['associatedPvp'].toString().doubleToInt(),
-                tax: element['impuestoArticulo'].toString().doubleToInt()))
+                price: element['associatedPvp'],
+                tax: element['impuestoArticulo']))
             .toList();
         return WsResponse(success: true, data: productList);
       }

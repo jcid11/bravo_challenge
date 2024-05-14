@@ -9,7 +9,7 @@ import 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final List<CartItem?> _cartItems = [];
   final CartInterface _cartService;
-  final String userEmail;
+  final String? userEmail;
 
   CartBloc({required this.userEmail})
       : _cartService = CartService(),
@@ -20,6 +20,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<GetCartEvent>(_getCart);
     on<CleanCartEvent>(_cleanCart);
     on<GetUserEvent>(_assignUserEmail);
+    add(GetUserEvent(userEmail: userEmail??''));
+    add(GetCartEvent());
   }
 
   void _assignUserEmail(GetUserEvent event, Emitter<CartState> emit) {

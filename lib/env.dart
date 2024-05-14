@@ -6,6 +6,3 @@ Future<Map<String, String>> loadEnvFile(String path) async {
   await dotenv.load(fileName: path);
   return dotenv.env;
 }
-bool isDevelopment() {
-  return env!['ENV'] == 'DEV';
-}

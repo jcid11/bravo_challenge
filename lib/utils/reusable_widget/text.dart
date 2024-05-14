@@ -13,14 +13,15 @@ class BuildText extends StatelessWidget {
   final TextDecoration? decoration;
 
   const BuildText(
-      {super.key, required this.text,
-        this.fontSize,
-        this.fontWeight,
-        this.textAlign,
-        this.color,
-        this.decoration,
-        this.maxLines,
-        this.textOverflow});
+      {super.key,
+      required this.text,
+      this.fontSize,
+      this.fontWeight,
+      this.textAlign,
+      this.color,
+      this.decoration,
+      this.maxLines,
+      this.textOverflow});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class BuildText extends StatelessWidget {
       style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,
-          color: color??ThemeApp.primaryColor,
+          color: color ?? ThemeApp.primaryColor,
           decoration: decoration),
       textAlign: textAlign,
     );

@@ -77,7 +77,6 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
     } catch (e) {
-      print('this is ${e}');
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }

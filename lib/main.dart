@@ -22,7 +22,7 @@ void main() async {
   );
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
-  Bloc.observer = const CounterObserver();
+  Bloc.observer = const ObserverBloc();
   runApp(BlocApp(
       authenticationRepository: authenticationRepository,
       child: const MyApp()));

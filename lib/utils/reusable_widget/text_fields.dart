@@ -50,7 +50,8 @@ class BorderedTextField extends StatefulWidget {
   final bool isWidthActivated;
 
   const BorderedTextField(
-      {super.key, this.validator,
+      {super.key,
+      this.validator,
       this.borderRadius = 0.0,
       this.validatePassword = false,
       this.hintStyle,
@@ -91,7 +92,8 @@ class BorderedTextField extends StatefulWidget {
       this.textInputAction = TextInputAction.done,
       this.countryCode,
       this.validateDominicanNumber = false,
-      this.selectCountryCode = true, required this.initialCountryCodeSelection});
+      this.selectCountryCode = true,
+      required this.initialCountryCodeSelection});
 
   @override
   State<BorderedTextField> createState() => _BorderedTextFieldState();
@@ -147,7 +149,8 @@ class _BorderedTextFieldState extends State<BorderedTextField> {
       textAlign: widget.textAlign,
       cursorColor: widget.cursorColor,
       textInputAction: widget.textInputAction,
-      inputFormatters: widget.inputFormatters ?? (widget.validateMobileNumber
+      inputFormatters: widget.inputFormatters ??
+          (widget.validateMobileNumber
               ? [
                   Utils.onlyNumber(),
                   LengthLimitingTextInputFormatter(10),

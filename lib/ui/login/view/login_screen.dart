@@ -25,7 +25,6 @@ class LoginScreen extends StatelessWidget {
         listener: (BuildContext context, state) {
           if (state.status.isSubmissionFailure) {
             Navigator.of(context, rootNavigator: true).pop();
-
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(

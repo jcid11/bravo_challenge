@@ -62,14 +62,12 @@ class CartService implements CartInterface {
         .collection('cartItems')
         .get();
     List cartList = cartSnapshot.docs.map((doc) {
-      double price = doc['price'] ;
-      double tax = doc['tax'] ;
       return CartItem(
         ProductModel(
             id: int.parse(doc['productId']),
             name: doc['name'],
-            price: price.doubleToInt(),
-            tax: tax.doubleToInt()),
+            price: doc['price'] ,
+            tax: doc['tax']),
         doc['quantity'],
       );
     }).toList();

@@ -19,6 +19,8 @@ class BlocHome extends Bloc<HomeEvent, HomeState> {
     _onPageRequest.stream
         .flatMap(_fetchProductList)
         .listen(_onNewListingStateController.add);
+    listenPageKey();
+    listenNewState();
   }
 
   static const _pageSize = 10;

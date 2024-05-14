@@ -13,9 +13,9 @@ class BuildCustomButton extends StatelessWidget {
   const BuildCustomButton(
       {Key? key,
       this.padding,
-        required this.text,
-        this.fontSize,
-        this.fontColor,
+      required this.text,
+      this.fontSize,
+      this.fontColor,
       required this.onPressed,
       this.color,
       this.borderRadius})
@@ -24,16 +24,20 @@ class BuildCustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius:borderRadius, color: color),
+      decoration: BoxDecoration(borderRadius: borderRadius, color: color),
       child: RawMaterialButton(
         onPressed: onPressed,
         constraints: const BoxConstraints(minWidth: 0),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        shape:  RoundedRectangleBorder(
-            borderRadius:borderRadius??BorderRadius.zero ),
+        shape: RoundedRectangleBorder(
+            borderRadius: borderRadius ?? BorderRadius.zero),
         child: Padding(
           padding: padding ?? EdgeInsets.zero,
-          child: BuildText(text: text,color: fontColor,fontSize: fontSize,),
+          child: BuildText(
+            text: text,
+            color: fontColor,
+            fontSize: fontSize,
+          ),
         ),
       ),
     );

@@ -1,5 +1,3 @@
-import 'package:bravo_challenge/bloc/cart/cart_bloc.dart';
-import 'package:bravo_challenge/bloc/cart/cart_event.dart';
 import 'package:bravo_challenge/ui/drawer/drawer.dart';
 import 'package:bravo_challenge/ui/home/view/home_form.dart';
 import 'package:bravo_challenge/utils/reusable_widget/text.dart';
@@ -10,24 +8,8 @@ import '../../../bloc/app/app_bloc.dart';
 import '../../../bloc/app/app_state.dart';
 import '../../../utils/theme.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    Future.microtask(() {
-      BlocProvider.of<CartBloc>(context).add(GetUserEvent(
-          userEmail: context.read<AppBloc>().state.user.email ?? ''));
-      BlocProvider.of<CartBloc>(context).add(GetCartEvent());
-    });
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: [
             const SizedBox(height: double.infinity, width: double.infinity),
-            // const ProductListContainer(),
             const ProductsList(),
             amountQuantityContainer()
           ],

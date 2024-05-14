@@ -55,7 +55,7 @@ class ProductScreen extends StatelessWidget {
 }
 
 Widget informationRow({required String title, required String value}) => Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BuildText(
           text: '$title: ',

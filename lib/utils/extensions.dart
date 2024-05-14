@@ -13,10 +13,10 @@ extension StringExtensions on String {
   }
 
   String toPesos(){
-    return '\$${this}0DOP';
+    return '\$$this.00DOP';
   }
 
-  int doubleToInt()=>int.parse(split('.')[0]);
+  int stringDoubleToInt()=>int.parse(split('.')[0]);
 
 }
 
